@@ -12,32 +12,18 @@ const handler = NextAuth({
     ],
     callbacks: {
         async session({ session }) {
-
-
-
             try {
-
                 const res = await userIdF(session.user.email);
-
-
-                console.log(res)
+                if (res?.user?.id) {
+                    session.user.id = res.user.id;
+                }
             } catch (error) {
                 console.log(error);
-
-            }
-
-
-
-            // const sessionUser = await User.findOne({
-            //     email: session.user.email,
-            // })
-
-            // session.user.id = sessionUser?._id.toString();
-            session.user.id = "sadsdsdsdsd"
+            }                
             return session;
         },
         async signIn({ profile }) {
-
+            
             try {
                 const res = await SignInF(profile.email);
                 if (res.status !== true) {

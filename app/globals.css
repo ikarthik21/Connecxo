@@ -12,6 +12,18 @@
 
 body {
   height: 100vh;
-  background-color: #d9ff197b;
+  background-color: #0f1010;
   color: white;
+}
+
+.edit-icon {
+
+  background-color: #06b6d4;
+  border-radius: 50px;
+  z-index: 100;
+  position: relative;
+  top: -140px;
+  left: 90px;
+  z-index: 100;
+  padding: 5px;
 }
