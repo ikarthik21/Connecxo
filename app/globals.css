@@ -12,7 +12,7 @@
 
 body {
   height: 100vh;
-  background-color: #0f1010;
+  background-color: #202020;
   color: white;
 }
 
@@ -26,4 +26,36 @@ body {
   left: 90px;
   z-index: 100;
   padding: 5px;
+}
+
+.flex-t-1 {
+  flex: 0.31;
+}
+
+.flex-t-2 {
+  flex: 0.12;
+}
+
+
+.flex-main-1 {
+  flex: 0.48;
+}
+
+.flex-main-2 {
+  flex: 1;
+}
+
+
+.border-color-1 {
+  border-color: #515151;
+  border-radius: 0.8px;
+}
+
+.border-color-2 {
+  border-color: #3e3e3e;
+  border-radius: 0.8px;
+}
+
+.flex-2 {
+  flex: 1;
 }

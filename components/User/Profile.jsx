@@ -8,9 +8,11 @@ import { useSession } from "next-auth/react";
 import { getProfileF, updateProfileF } from '@utils/apis/userApi';
 import { FaUserEdit } from 'react-icons/fa'
 import { BsFillCameraFill } from "react-icons/bs";
+import { adduser } from '../../store/userSlice';
+import { useDispatch } from "react-redux";
 
 const Profile = () => {
-
+    const dispatch = useDispatch();
     const { data: session } = useSession();
     const [user, setUser] = useState({ id: "", email: "", display_name: "", about: "", profileImg: "" });
     const [showEdit, setShowEdit] = useState(true);
@@ -20,8 +22,9 @@ const Profile = () => {
     useEffect(() => {
         (async () => {
             const data = await getProfileF(session?.user.id);
+            dispatch(adduser(data));
             setUser(data);
-            if (data.display_name === "" && data.about === "") {
+            if (data?.display_name === "" && data?.about === "") {
                 setShowEdit(false);
             }
         }
@@ -72,7 +75,7 @@ const Profile = () => {
 
                 <div className="h-32" style={showEdit ? { pointerEvents: "none", opacity: "0.55" } : { pointerEvents: "auto" }}>
 
-                    <Image src={user.profileImg === "" ? "/images/gamer.png" : `${user?.profileImg}`} className="profile-imagem-2 rounded-full z-10" alt="Profile Image" width={130} height={150} />
+                    <Image src={user?.profileImg === "" ? "/images/gamer.png" : `${user?.profileImg}`} className="profile-imagem-2 rounded-full z-10" alt="Profile Image" width={130} height={150} />
 
 
                     {showEdit ? "" :

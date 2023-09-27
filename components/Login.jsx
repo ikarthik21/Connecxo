@@ -11,6 +11,7 @@ const bpone = Black_Ops_One({
     subsets: ["latin"],
 });
 
+
 const Login = () => {
     const { data: session } = useSession();
 
@@ -30,7 +31,7 @@ const Login = () => {
                 priority={true}
                 width={150}
                 height={200}
-                alt="no IMf"
+                alt="no Img"
                 className="mb-2"
             />
             <h1
@@ -80,5 +81,10 @@ const Login = () => {
         </div>
     );
 };
+
+
+
+
+
 
 export default Login;

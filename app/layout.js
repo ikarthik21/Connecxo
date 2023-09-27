@@ -1,5 +1,8 @@
 import './globals.css'
 import Providers from '@components/Providers';
+import { Provider } from 'react-redux'
+import store from '../store/store';
+
 
 export const metadata = {
   title: 'connecxo',
@@ -12,8 +15,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+     
       <Providers>
+
         <body >{children}</body>
+
       </Providers>
     </html>
   )
