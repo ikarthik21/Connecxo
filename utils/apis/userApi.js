@@ -4,6 +4,16 @@ const B_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
 
+export const getAllusersF = async () => {
+    try {
+        const res = await axios.get(`${B_URL}/user/all`)
+        return res.data;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
 
 export const getProfileF = async (id) => {
     try {

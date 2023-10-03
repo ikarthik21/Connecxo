@@ -1,15 +1,26 @@
 
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { IoMdContact } from 'react-icons/io';
 import { RiContactsBook2Fill } from 'react-icons/ri';
-import { useSelector } from "react-redux";
+import { BiSolidMessageSquareDetail } from 'react-icons/bi';
+import AllContacts from './AllContacts';
+import { useState } from "react";
 
-const Nav = () => {
-    const user = useSelector(state => state.user)
-    return <div className="bg-slate-600 p-[8px]  rounded-l-md" >
+const Nav = ({ user, setToggle }) => {
+
+    return <div className="bg-slate-600 py-[12px] px-2  rounded-l-md" >
         <div className="flex items-center justify-between">
-            <Image src={user.profileImg} className="h-12 w-12 rounded-full" height={2} width={40} alt="contact img" />
-            <RiContactsBook2Fill size={32} className="ml-2" cursor="pointer" />
+            <BiSolidMessageSquareDetail size={32} cursor="pointer" onClick={() => setToggle({
+                messages: true,
+                contacts: false
+            })} />
+            <div className="flex items-center">
+                <RiContactsBook2Fill size={32} className="mr-4" cursor="pointer" onClick={() => setToggle({
+                    messages: false,
+                    contacts: true
+                })} />
+                <Image src={user?.profileImg} className="rounded-3xl" height={40} width={40} alt="profile img" />
+            </div>
         </div>
     </div>
 }
@@ -27,21 +38,36 @@ const Contact = ({ img, name, lastchat }) => {
 }
 
 
+const Messages = () => {
+    return <div className="flex flex-col flex-main-1 bg-slate-800 rounded-l-md cursor-pointer">
+        <input type="text" className="ml-2 mt-4  mb-1 bg-zinc-300 text-black mr-8 p-1 rounded-lg border-none outline-none" />
+        <div className="flex flex-col " >
+            <Contact img="/images/gamer.png" name="Karthik" lastchat="Good night" />
+            <Contact img="/images/gamer.png" name="Karthik" lastchat="Good night" />
+            <Contact img="/images/gamer.png" name="Karthik" lastchat="Good night" />
+            <Contact img="/images/gamer.png" name="Karthik" lastchat="Good night" />
+            <Contact img="/images/gamer.png" name="Karthik" lastchat="Good night" />
+        </div>
+    </div>
+}
+
+
 const ChatMenu = () => {
+    const { data: session } = useSession();
+
+    const [toggle, setToggle] = useState({
+        messages: true,
+        contacts: false
+    })
+
     return (
         <div className="flex flex-col flex-main-1 bg-slate-800 rounded-l-md cursor-pointer">
 
-            <Nav />
+            <Nav user={session?.user} setToggle={setToggle} />
 
+            {toggle.contacts && <AllContacts />}
+            {toggle.messages && <Messages />}
 
-            <input type="text" className="ml-2 mt-2 mb-1 bg-zinc-300 text-black mr-8 p-1 rounded-lg border-none outline-none" />
-            <div className="flex flex-col " >
-                <Contact img="/images/gamer.png" name="Karthik" lastchat="Good night" />
-                <Contact img="/images/gamer.png" name="Karthik" lastchat="Good night" />
-                <Contact img="/images/gamer.png" name="Karthik" lastchat="Good night" />
-                <Contact img="/images/gamer.png" name="Karthik" lastchat="Good night" />
-                <Contact img="/images/gamer.png" name="Karthik" lastchat="Good night" />
-            </div>
         </div>
     )
 }

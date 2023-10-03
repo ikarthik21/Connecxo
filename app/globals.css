@@ -11,8 +11,8 @@
 
 
 body {
-  height: 100vh;
-  background-color: #202020;
+  overflow-x: hidden;
+  background-color: #101010;
   color: white;
 }
 
@@ -58,4 +58,51 @@ body {
 
 .flex-2 {
   flex: 1;
+}
+
+
+
+.logo {
+
+
+  animation: crazyWheelRotation 4s infinite;
+
+}
+
+@keyframes crazyWheelRotation {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  20% {
+    transform: rotate(90deg) scale(1.2);
+  }
+
+  40% {
+    transform: rotate(180deg) scale(0.8);
+  }
+
+  60% {
+    transform: rotate(270deg) scale(1.2);
+  }
+
+  80% {
+    transform: rotate(360deg) scale(0.9);
+  }
+
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* Rotation animation */
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+    /* One full rotation */
+  }
 }

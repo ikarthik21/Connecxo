@@ -8,9 +8,7 @@ import { useSession } from "next-auth/react";
 import { getProfileF, updateProfileF } from '@utils/apis/userApi';
 import { FaUserEdit } from 'react-icons/fa'
 import { BsFillCameraFill } from "react-icons/bs";
-import { adduser } from '../../store/userSlice';
-import { useDispatch } from "react-redux";
-
+ 
 const Profile = () => {
     const dispatch = useDispatch();
     const { data: session } = useSession();

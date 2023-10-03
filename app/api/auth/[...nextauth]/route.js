@@ -16,14 +16,15 @@ const handler = NextAuth({
                 const res = await userIdF(session.user.email);
                 if (res?.user?.id) {
                     session.user.id = res.user.id;
+                    session.user.profileImg = res.user.profileImg;
                 }
             } catch (error) {
                 console.log(error);
-            }                
+            }
             return session;
         },
         async signIn({ profile }) {
-            
+
             try {
                 const res = await SignInF(profile.email);
                 if (res.status !== true) {
