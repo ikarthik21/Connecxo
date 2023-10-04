@@ -4,7 +4,6 @@ import { Black_Ops_One } from "next/font/google";
 import { FcGoogle } from "react-icons/fc";
 import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
-import Profile from "./User/Profile";
 
 const bpone = Black_Ops_One({
     weight: "400",
@@ -14,16 +13,42 @@ const bpone = Black_Ops_One({
 
 
 
-export const HomeComp = () => {
-    return (
-        <>
 
-        
-        
-        </>
-        )
+
+export const HomeComp = () => {
+
+    return <div className="flex flex-col m-auto items-center">
+
+        <Image
+            src="/images/logo.png"
+            priority={true}
+            width={"150"}
+            height={"150"}
+            alt="no Img"
+            className="mb-2 logo"
+        />
+        <h1
+            className={`font-semibold text-5xl ${bpone.className}  mb-4 mt-12 tracking-wide font-1 text-cyan-400  `}
+        >
+            Connecxo
+
+        </h1>
+
+        <p className="text-justify font-mono text-[15px] md:text-[18px]  md:w-auto m-4" >
+            A platform for instant messaging, voice and video callling.
+        </p>
+
+
+
+
+    </div>
+
+
+
 
 }
+
+
 
 const Login = () => {
     const { data: session } = useSession();
@@ -43,31 +68,13 @@ const Login = () => {
 
     return (
         <div className="flex flex-col m-auto items-center">
-
-            <Image
-                src="/images/logo.png"
-                priority={true}
-                width={"150"}
-                height={"150"}
-                alt="no Img"
-                className="mb-2 logo"
-            />
-            <h1
-                className={`font-semibold text-5xl ${bpone.className}  mb-4 mt-12 tracking-wide font-1 text-cyan-400  `}
-            >
-                Connecxo
-
-            </h1>
-
-            <p className="text-justify font-mono text-[15px] md:text-[18px]  md:w-auto m-4" >
-                A platform for instant messaging, voice and video callling.
-            </p>
-
+            <HomeComp />
+            
             {
                 session?.user ? (
 
                     <>
-                        {/* <Profile /> */}
+
                         <button
                             className=" bg-cyan-500 flex justify-center items-center  py-[10px] px-4  rounded"
                             onClick={() => {
