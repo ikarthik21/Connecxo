@@ -12,6 +12,19 @@ const bpone = Black_Ops_One({
 });
 
 
+
+
+export const HomeComp = () => {
+    return (
+        <>
+
+        
+        
+        </>
+        )
+
+}
+
 const Login = () => {
     const { data: session } = useSession();
 
@@ -23,6 +36,10 @@ const Login = () => {
             setProviders(res);
         })();
     }, []);
+
+
+
+
 
     return (
         <div className="flex flex-col m-auto items-center">
@@ -50,7 +67,7 @@ const Login = () => {
                 session?.user ? (
 
                     <>
-                        <Profile />
+                        {/* <Profile /> */}
                         <button
                             className=" bg-cyan-500 flex justify-center items-center  py-[10px] px-4  rounded"
                             onClick={() => {

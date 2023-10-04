@@ -1,18 +1,19 @@
 import { IoCall } from 'react-icons/io5';
 import { BsCameraVideoFill, BsThreeDotsVertical } from 'react-icons/bs';
-
 import Image from 'next/image';
 
 
-const ChatNav = () => {
+
+const ChatNav = ({ user }) => {
+
     return <div className="bg-slate-600 flex justify-between py-[8px] px-4 items-center rounded-r-md" >
         <div className='flex'>
-            <Image src="/images/gamer.png" className="h-12 w-12" height={2} width={40}
-            alt='profile img' />
+            <Image src={user?.profileImg || "/images/gamer.png"} className="h-12 w-12 rounded-3xl" height={2} width={40}
+                alt='profile img' />
 
 
             <div className='flex item-center flex-col ml-4'>
-                <h1 className='text font-bold tracking-wide'>Name</h1>
+                <h1 className='text font-bold tracking-wide'>{user?.display_name}</h1>
                 <p className='text-sm'>Online</p>
             </div>
         </div>

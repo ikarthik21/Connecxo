@@ -5,12 +5,13 @@ import { RiContactsBook2Fill } from 'react-icons/ri';
 import { BiSolidMessageSquareDetail } from 'react-icons/bi';
 import AllContacts from './AllContacts';
 import { useState } from "react";
+import { signOut } from 'next-auth/react'
 
 const Nav = ({ user, setToggle }) => {
 
     return <div className="bg-slate-600 py-[12px] px-2  rounded-l-md" >
         <div className="flex items-center justify-between">
-            <BiSolidMessageSquareDetail size={32} cursor="pointer" onClick={() => setToggle({
+            <BiSolidMessageSquareDetail size={31} cursor="pointer" onClick={() => setToggle({
                 messages: true,
                 contacts: false
             })} />
@@ -19,7 +20,22 @@ const Nav = ({ user, setToggle }) => {
                     messages: false,
                     contacts: true
                 })} />
-                <Image src={user?.profileImg} className="rounded-3xl" height={40} width={40} alt="profile img" />
+
+
+                <div className="relative group">
+                    <img src={user?.profileImg} className="rounded-3xl" height={40} width={40} alt="profile img" />
+                    <div className="absolute top-5 transform -translate-x-1/2 mt-4 bg-[#111A30] rounded opacity-0   transition-all duration-300 ease-in-out -translate-y-2 group-hover:opacity-100 group-hover:-translate-y-0">
+                        <div className=" hover:bg-slate-800   p-3 rounded" onClick={() => {
+                            signOut();
+                        }}>Logout</div>
+                    </div>
+                </div>
+
+
+
+
+
+
             </div>
         </div>
     </div>
@@ -61,7 +77,7 @@ const ChatMenu = () => {
     })
 
     return (
-        <div className="flex flex-col flex-main-1 bg-slate-800 rounded-l-md cursor-pointer">
+        <div className="flex flex-col flex-main-1 bg-slate-800 rounded-l-md cursor-pointer ">
 
             <Nav user={session?.user} setToggle={setToggle} />
 

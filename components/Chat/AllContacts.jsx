@@ -1,26 +1,19 @@
 'use client';
-import { getAllusersF } from '@utils/apis/userApi';
-import { useEffect, useState } from 'react';
+import { use, useEffect } from 'react';
 import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from '@store/userSlice'
+import { currentMessageUser } from '@store/currentMessageSlice';
+
 const AllContacts = () => {
 
-    const [users, setUsers] = useState({});
+
+    const dispatch = useDispatch();
+    const users = useSelector(state => (state.users.data))
 
     useEffect(() => {
-        (
-            async () => {
-                const res = await getAllusersF();
-                const dict = {};
-                res.forEach(user => {
-                    const fl = (user.display_name).charAt(0).toUpperCase();
-                    if (!dict[fl]) {
-                        dict[fl] = [];
-                    } dict[fl].push(user);
-                });
-                setUsers(dict);
-            }
-        )();
-    }, [])
+        dispatch(getContacts());
+    }, [dispatch])
 
 
     return (
@@ -39,7 +32,9 @@ const AllContacts = () => {
                                     <div
                                         className="flex border-b-[1px] border-color-1 py-4 px-2 hover:bg-slate-700"
                                         key={user.id}
-                                    >
+                                        onClick={() => {
+                                            dispatch(currentMessageUser(user))
+                                        }}>
                                         <Image
                                             src={user.profileImg}
                                             className="h-12 w-12 rounded-3xl"
