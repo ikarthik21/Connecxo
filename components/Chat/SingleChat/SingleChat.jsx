@@ -53,10 +53,6 @@ const SingleChat = () => {
         await addMessageF(mess);
         dispatch(addMessages(sendData));
 
-
-
-
-
     }
 
     useEffect(() => {

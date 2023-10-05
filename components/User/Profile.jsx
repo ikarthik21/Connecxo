@@ -8,9 +8,8 @@ import { useSession } from "next-auth/react";
 import { getProfileF, updateProfileF } from '@utils/apis/userApi';
 import { FaUserEdit } from 'react-icons/fa'
 import { BsFillCameraFill } from "react-icons/bs";
- 
+
 const Profile = () => {
-    const dispatch = useDispatch();
     const { data: session } = useSession();
     const [user, setUser] = useState({ id: "", email: "", display_name: "", about: "", profileImg: "" });
     const [showEdit, setShowEdit] = useState(true);
@@ -20,7 +19,7 @@ const Profile = () => {
     useEffect(() => {
         (async () => {
             const data = await getProfileF(session?.user.id);
-            dispatch(adduser(data));
+
             setUser(data);
             if (data?.display_name === "" && data?.about === "") {
                 setShowEdit(false);
@@ -69,7 +68,7 @@ const Profile = () => {
 
         <div className="mt-4 flex flex-col">
 
-            <div className="flex flex-col items-center  justify-center md:flex-row gap-10 m-16  ">
+            <div className="flex flex-col items-center   justify-center  gap-10 m-16  ">
 
                 <div className="h-32" style={showEdit ? { pointerEvents: "none", opacity: "0.55" } : { pointerEvents: "auto" }}>
 

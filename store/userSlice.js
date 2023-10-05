@@ -22,16 +22,18 @@ export const { fetchContacts } = userSlice.actions;
 
 export function getContacts() {
     return async function (dispatch) {
-        const res = await axios.get('http://localhost:3100/user/all');
-        let dict = {};
-      
-        res.data.forEach(user => {
-            const fl = (user.display_name).charAt(0).toUpperCase();
-            if (!dict[fl]) {
-                dict[fl] = [];
-            } dict[fl].push(user);
+        const res = await axios.get(process.env.NEXT_PUBLIC_BACKEND_URL + '/user/all');
+        const dict = {};
+
+        res.data.forEach((user) => {
+            const fl = user.display_name[0].toUpperCase();
+            dict[fl] = (dict[fl] || []).concat(user);
         });
-     
-        dispatch(fetchContacts(dict));
+
+        const sortedDict = Object.fromEntries(
+            Object.entries(dict).sort((a, b) => a[0].localeCompare(b[0]))
+        );
+
+        dispatch(fetchContacts(sortedDict));
     }
 }
