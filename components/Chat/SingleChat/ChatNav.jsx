@@ -8,7 +8,7 @@ const ChatNav = ({ user }) => {
 
     return <div className="bg-slate-600 flex justify-between py-[8px] px-4 items-center" >
         <div className='flex'>
-            <Image src={user?.profileImg || "/images/gamer.png"} className="h-12 w-12 rounded-3xl" height={2} width={40}
+            <Image src={user?.profileImg} className="h-12 w-12 rounded-3xl" height={2} width={40}
                 alt='profile img' />
 
 

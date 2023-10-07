@@ -25,7 +25,8 @@ const Nav = ({ user, setToggle }) => {
 
 
                 <div className="relative group">
-                    <img src={user?.profileImg} className="rounded-3xl" height={40} width={40} alt="profile img" />
+                    <Image src={user?.profileImg} className="rounded-3xl" height={40} width={40} alt="profile img" />
+
                     <div className="absolute top-5 transform -translate-x-1/2 mt-4 bg-[#0d1425] rounded opacity-0   transition-all duration-300 ease-in-out -translate-y-2 group-hover:opacity-100 group-hover:-translate-y-0" >
                         <div className=" hover:bg-[#131c34]  px-4 py-3 rounded" onClick={() => setToggle({
                             messages: false,
@@ -79,8 +80,8 @@ const ChatMenu = () => {
     const { data: session } = useSession();
 
     const [toggle, setToggle] = useState({
-        messages: true,
-        contacts: false,
+        messages: false,
+        contacts: true,
         profile: false
     })
 

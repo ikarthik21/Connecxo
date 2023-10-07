@@ -24,9 +24,9 @@ const handler = NextAuth({
             return session;
         },
         async signIn({ profile }) {
-
+          
             try {
-                const res = await SignInF(profile.email);
+                const res = await SignInF(profile.email, profile.name);
                 if (res.status !== true) {
                     return false;
                 }

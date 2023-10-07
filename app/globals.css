@@ -48,12 +48,12 @@ body {
 
 .border-color-1 {
   border-color: #515151;
- 
+
 }
 
 .border-color-2 {
   border-color: #3e3e3e;
- 
+
 }
 
 .flex-2 {
@@ -107,4 +107,13 @@ body {
   }
 }
 
- 
+
+
+
+.zi-2 {
+  position: absolute;
+  top:28vh;
+  left: 34vw;
+  z-index: 1000;
+
+}

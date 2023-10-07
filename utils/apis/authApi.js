@@ -4,10 +4,10 @@ const B_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
 
-export const SignInF = async (email) => {
+export const SignInF = async (email, name) => {
 
     try {
-        const res = await axios.post(`${B_URL}/api/auth/check-user`, { email: email })
+        const res = await axios.post(`${B_URL}/api/auth/check-user`, { email, name })
         return res.data;
     }
     catch (error) {
