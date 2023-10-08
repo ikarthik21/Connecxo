@@ -13,6 +13,5 @@ export const socketSlice = createSlice({
     }
 });
 
-
 export const { addSocket, getSocket } = socketSlice.actions;
 

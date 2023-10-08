@@ -77,27 +77,21 @@ const InputBox = ({ setMessage, sendMessage, message, setFiles, files }) => {
     const emojiPickerRef = useRef(null);
     const fileInputRef = useRef(null);
 
-
-
     const handleImageClick = () => {
         fileInputRef.current.click();
     };
 
+    // Image Handling
     const handleImageChange = (e) => {
         const files = e.target.files;
         setFiles(e.target.files);
         setImageModal(true);
-
         if (files) {
-
             const reader = new FileReader();
-
             reader.onload = (e) => {
                 setSelectedFile(e.target.result);
             };
-
             reader.readAsDataURL(files[0]);
-
         }
         else {
             setSelectedFile();
@@ -105,8 +99,8 @@ const InputBox = ({ setMessage, sendMessage, message, setFiles, files }) => {
     };
 
 
+    //  Outsie click handler to close modal windows
     useEffect(() => {
-
         const handleClickOutside = (event) => {
             if (
                 (emojiButtonRef.current &&
@@ -117,13 +111,8 @@ const InputBox = ({ setMessage, sendMessage, message, setFiles, files }) => {
                 setShowEmoji(false);
 
             }
-
         };
-
-
         document.addEventListener('click', handleClickOutside);
-
-
         return () => {
             document.removeEventListener('click', handleClickOutside);
         };
@@ -134,11 +123,15 @@ const InputBox = ({ setMessage, sendMessage, message, setFiles, files }) => {
         setShowEmoji((prev) => !prev);
     };
 
+
     return (
         <div className="bg-slate-600 px-2 py-[10px] rounded-r-md">
             <div className='flex  flex-t-2  item-center justify-between'>
+
                 <div ref={emojiButtonRef}>
+
                     <BsFillEmojiWinkFill size={27} className='ml-4' cursor="pointer" onClick={emojiHandler} />
+
                     {showEmoji && (
                         <div className='zi-2 ' ref={emojiPickerRef}>
                             <EmojiPicker onEmojiClick={(emoji) => setMessage((prev) => prev += emoji.emoji)} />
@@ -151,17 +144,8 @@ const InputBox = ({ setMessage, sendMessage, message, setFiles, files }) => {
 
                 <input type="file" ref={fileInputRef} accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
 
-                {imageModal &&
 
-
-                    <ImagesPop setImageModal={setImageModal} files={files} setFiles={setFiles} sendMessage={sendMessage} selectedFile={selectedFile} />
-                }
-
-
-
-
-
-
+                {imageModal && <ImagesPop setImageModal={setImageModal} files={files} setFiles={setFiles} sendMessage={sendMessage} selectedFile={selectedFile} />}
 
                 <div className='flex flex-2 items-center ml-4'>
                     <input
@@ -176,6 +160,7 @@ const InputBox = ({ setMessage, sendMessage, message, setFiles, files }) => {
                             }
                         }}
                     />
+
                     <BsFillMicFill size={25} cursor="pointer" />
 
                     <MdSend size={25} className='ml-4' cursor="pointer" onClick={() => sendMessage(message, "text")} />

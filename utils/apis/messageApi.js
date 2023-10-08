@@ -2,7 +2,6 @@ import axios from "axios";
 
 const B_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-
 export const addMessageF = async (message) => {
     try {
         const res = await axios.post(`${B_URL}/api/message/add-message`, message)

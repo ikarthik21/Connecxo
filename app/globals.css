@@ -8,8 +8,6 @@
   box-sizing: border-box;
 }
 
-
-
 body {
   overflow-x: hidden;
   background-color: #101010;
@@ -17,7 +15,6 @@ body {
 }
 
 .edit-icon {
-
   background-color: #06b6d4;
   border-radius: 50px;
   z-index: 100;
@@ -45,28 +42,20 @@ body {
   flex: 1;
 }
 
-
 .border-color-1 {
   border-color: #515151;
-
 }
 
 .border-color-2 {
   border-color: #3e3e3e;
-
 }
 
 .flex-2 {
   flex: 1;
 }
 
-
-
 .logo {
-
-
   animation: crazyWheelRotation 4s infinite;
-
 }
 
 @keyframes crazyWheelRotation {
@@ -95,7 +84,7 @@ body {
   }
 }
 
-/* Rotation animation */
+
 @keyframes rotate {
   0% {
     transform: rotate(0deg);
@@ -103,17 +92,24 @@ body {
 
   100% {
     transform: rotate(360deg);
-    /* One full rotation */
   }
 }
 
-
-
-
 .zi-2 {
   position: absolute;
-  top:28vh;
+  top: 28vh;
   left: 34vw;
   z-index: 1000;
 
 }
+
+.scrollbar::-webkit-scrollbar {
+  width: 0.50rem;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #304e76;
+  border-radius: 25px;
+  cursor: pointer;
+}
+ 

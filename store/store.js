@@ -3,6 +3,7 @@ import { userSlice } from "./userSlice";
 import { currentMessageSlice } from "./currentMessageSlice";
 import { messagesSlice } from "./messagesSlice";
 import { socketSlice } from "./socketSlice";
+
 const store = configureStore({
     reducer: {
         users: userSlice.reducer,

@@ -19,7 +19,6 @@ const Profile = () => {
     useEffect(() => {
         (async () => {
             const data = await getProfileF(session?.user.id);
-
             setUser(data);
             if (data?.display_name === "" && data?.about === "") {
                 setShowEdit(false);
@@ -60,7 +59,7 @@ const Profile = () => {
             console.log(error);
         }
     }
-    
+
     return (
 
         <div className="mt-4 flex flex-col">

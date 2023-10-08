@@ -2,33 +2,32 @@
 
 import ChatNav from "./ChatNav";
 import InputBox from "./InputBox";
-import { useSelector, useDispatch } from 'react-redux'
-import { HomeComp } from "@components/Login";
+import { useSelector, useDispatch } from 'react-redux';
+import { HomeComp } from "@components/Auth/Login";
 import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { addMessageF, getMessagesF } from '@utils/apis/messageApi';
 import { getMessages, addMessages } from '@store/messagesSlice';
 import Messages from "./Messages";
 import { io } from 'socket.io-client';
+import { getISOTime } from "@components/Utils";
+
+
+
 
 const SingleChat = () => {
 
     const { data: session } = useSession();
     const dispatch = useDispatch();
-
-    const user = useSelector(state => state.cmuser)
-    const messages = useSelector(state => state.messages)
+    const user = useSelector(state => state.cmuser);
+    const messages = useSelector(state => state.messages);
     const [message, setMessage] = useState("");
     const [files, setFiles] = useState([]);
-    const [socketEvent, setSocketEvent] = useState(false);
     const socket = useRef();
 
-
+    // Function for sending messages 
     const sendMessage = async (message, messtype) => {
-
-        if (message === "") {
-            return;
-        }
+        if (message === "") return;
 
         const mess = {
             message: message,
@@ -37,54 +36,52 @@ const SingleChat = () => {
             type: messtype
         }
 
-        const now = new Date();
-        const formattedDate = now.toISOString();
-
         const sendData = {
             senderId: mess.from,
             receiverId: mess.to,
             type: messtype,
             message: mess.message,
             messageStatus: "delivered",
-            createdAt: formattedDate
+            createdAt: getISOTime()
         }
 
         socket.current.emit('send-msg', mess);
         setMessage("");
-        setFiles([])
+        setFiles([]);
         await addMessageF(mess);
         dispatch(addMessages(sendData));
-
     }
 
-    // msgs fetch from db
+    // Messages Fetching
     useEffect(() => {
-        (async () => {
+        const fetchMessages = async () => {
             if (session.user.id && user.id) {
                 const res = await getMessagesF(session.user.id, user.id);
                 dispatch(getMessages(res.messages));
             }
         }
-        )();
-    }, [user])
+        fetchMessages();
+    }, [user]);
 
+
+    // connecting user with socket
     useEffect(() => {
         if (session?.user) {
             socket.current = io(process.env.NEXT_PUBLIC_BACKEND_URL);
             socket.current.emit("add-user", session?.user.id);
         }
-    }, [session?.user])
+    }, [session?.user]);
 
 
-
+    // socket message receive
     useEffect(() => {
         if (socket.current) {
             socket.current.on('msg-receive', (data) => {
                 dispatch(addMessages(data));
             })
-            setSocketEvent(true);
+
         }
-    }, [socket.current])
+    }, [socket.current]);
 
 
     return (
@@ -94,18 +91,14 @@ const SingleChat = () => {
                     <div className="flex flex-col justify-between  h-[96vh] ">
                         <ChatNav user={user} />
                         <Messages messages={messages} userId={session.user.id} />
-                        <InputBox setMessage={setMessage} files={files} setFiles={setFiles} message={message} sendMessage={sendMessage}
-                        />
+                        <InputBox setMessage={setMessage} files={files} setFiles={setFiles} message={message} sendMessage={sendMessage} />
                     </div>
                     :
+                    
                     <HomeComp />
             }
-
         </div>
-
-
-
-    )
+    );
 }
 
-export default SingleChat
+export default SingleChat;

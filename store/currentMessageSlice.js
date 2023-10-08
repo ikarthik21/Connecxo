@@ -10,6 +10,5 @@ export const currentMessageSlice = createSlice({
     }
 });
 
-
 export const { currentMessageUser } = currentMessageSlice.actions;
 

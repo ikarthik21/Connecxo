@@ -12,13 +12,15 @@ const Nav = ({ user, setToggle }) => {
 
     return <div className="bg-slate-600 py-[12px] px-2 rounded-l-lg" >
         <div className="flex items-center justify-between">
+         
             <BiSolidMessageSquareDetail size={31} cursor="pointer" onClick={() => setToggle({
                 messages: true,
                 contacts: false,
                 profile: false
             })} />
+
             <div className="flex items-center">
-                <RiContactsBook2Fill size={32} className="mr-4" cursor="pointer" onClick={() => setToggle({
+                <RiContactsBook2Fill size={32} className="mr-6" cursor="pointer" onClick={() => setToggle({
                     messages: false,
                     contacts: true,
                     profile: false
@@ -33,6 +35,7 @@ const Nav = ({ user, setToggle }) => {
                             contacts: false,
                             profile: true
                         })} >Profile</div>
+
                         <div className=" hover:bg-[#131c34]  px-4 py-3 rounded" onClick={() => {
                             signOut();
                         }}>Logout</div>
@@ -40,7 +43,7 @@ const Nav = ({ user, setToggle }) => {
                 </div>
             </div>
         </div>
-    </div >
+    </div>
 }
 
 const Contact = ({ img, name, lastchat }) => {
@@ -71,6 +74,7 @@ const Messages = () => {
 
 
 const ChatMenu = () => {
+
     const { data: session } = useSession();
 
     const [toggle, setToggle] = useState({
@@ -81,13 +85,10 @@ const ChatMenu = () => {
 
     return (
         <div className="flex flex-col flex-main-1  bg-slate-800 cursor-pointer rounded-l-xl  border-color-1  border-r">
-
             <Nav user={session?.user} setToggle={setToggle} />
-
             {toggle.contacts && <AllContacts />}
             {toggle.messages && <Messages />}
             {toggle.profile && <Profile />}
-
         </div>
     )
 }

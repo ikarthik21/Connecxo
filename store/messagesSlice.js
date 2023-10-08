@@ -14,6 +14,5 @@ export const messagesSlice = createSlice({
     }
 });
 
-
 export const { getMessages, addMessages } = messagesSlice.actions;
 
