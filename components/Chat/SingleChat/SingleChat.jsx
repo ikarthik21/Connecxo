@@ -19,13 +19,12 @@ const SingleChat = () => {
     const user = useSelector(state => state.cmuser)
     const messages = useSelector(state => state.messages)
     const [message, setMessage] = useState("");
+    const [files, setFiles] = useState([]);
     const [socketEvent, setSocketEvent] = useState(false);
     const socket = useRef();
 
 
-
-
-    const sendMessage = async () => {
+    const sendMessage = async (message, messtype) => {
 
         if (message === "") {
             return;
@@ -34,15 +33,17 @@ const SingleChat = () => {
         const mess = {
             message: message,
             from: session.user.id,
-            to: user.id
+            to: user.id,
+            type: messtype
         }
 
         const now = new Date();
         const formattedDate = now.toISOString();
+
         const sendData = {
             senderId: mess.from,
             receiverId: mess.to,
-            type: "text",
+            type: messtype,
             message: mess.message,
             messageStatus: "delivered",
             createdAt: formattedDate
@@ -50,10 +51,22 @@ const SingleChat = () => {
 
         socket.current.emit('send-msg', mess);
         setMessage("");
+        setFiles([])
         await addMessageF(mess);
         dispatch(addMessages(sendData));
 
     }
+
+    // msgs fetch from db
+    useEffect(() => {
+        (async () => {
+            if (session.user.id && user.id) {
+                const res = await getMessagesF(session.user.id, user.id);
+                dispatch(getMessages(res.messages));
+            }
+        }
+        )();
+    }, [user])
 
     useEffect(() => {
         if (session?.user) {
@@ -71,25 +84,7 @@ const SingleChat = () => {
             })
             setSocketEvent(true);
         }
-
-
     }, [socket.current])
-
-
-
-
-
-
-
-    useEffect(() => {
-        (async () => {
-            if (session.user.id && user.id) {
-                const res = await getMessagesF(session.user.id, user.id);
-                dispatch(getMessages(res.messages));
-            }
-        }
-        )();
-    }, [user])
 
 
     return (
@@ -99,7 +94,7 @@ const SingleChat = () => {
                     <div className="flex flex-col justify-between  h-[96vh] ">
                         <ChatNav user={user} />
                         <Messages messages={messages} userId={session.user.id} />
-                        <InputBox setMessage={setMessage} message={message} sendMessage={sendMessage}
+                        <InputBox setMessage={setMessage} files={files} setFiles={setFiles} message={message} sendMessage={sendMessage}
                         />
                     </div>
                     :

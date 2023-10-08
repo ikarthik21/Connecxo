@@ -34,7 +34,6 @@ const Profile = () => {
         fileInputRef.current.click();
     };
 
-
     const uploadFile = async (event) => {
 
         try {
@@ -48,10 +47,7 @@ const Profile = () => {
         }
     };
 
-
-
     const updateUser = async () => {
-
         try {
             setStatus("updating....");
             const res = await updateProfileF(user);
@@ -64,6 +60,7 @@ const Profile = () => {
             console.log(error);
         }
     }
+    
     return (
 
         <div className="mt-4 flex flex-col">

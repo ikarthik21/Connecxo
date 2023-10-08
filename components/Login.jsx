@@ -10,15 +10,9 @@ const bpone = Black_Ops_One({
     subsets: ["latin-ext"],
 });
 
-
-
-
-
-
 export const HomeComp = () => {
 
     return <div className="flex flex-col m-auto items-center">
-
         <Image
             src="/images/logo.png"
             priority={true}
@@ -37,15 +31,7 @@ export const HomeComp = () => {
         <p className="text-justify font-mono text-[15px] md:text-[18px]  md:w-auto m-4" >
             A platform for instant messaging, voice and video callling.
         </p>
-
-
-
-
     </div>
-
-
-
-
 }
 
 
@@ -62,19 +48,14 @@ const Login = () => {
         })();
     }, []);
 
-
-
-
-
     return (
         <div className="flex flex-col m-auto items-center">
             <HomeComp />
-            
+
             {
                 session?.user ? (
 
                     <>
-
                         <button
                             className=" bg-cyan-500 flex justify-center items-center  py-[10px] px-4  rounded"
                             onClick={() => {
@@ -87,7 +68,6 @@ const Login = () => {
                     </>
                 ) : (
                     <div>
-
                         {providers &&
                             Object.values(providers).map((provider) => {
                                 return (
@@ -109,10 +89,5 @@ const Login = () => {
         </div >
     );
 };
-
-
-
-
-
 
 export default Login;

@@ -7,6 +7,7 @@ import AllContacts from './AllContacts';
 import { useState } from "react";
 import { signOut } from 'next-auth/react'
 import Profile from "@components/User/Profile";
+
 const Nav = ({ user, setToggle }) => {
 
     return <div className="bg-slate-600 py-[12px] px-2 rounded-l-lg" >
@@ -23,7 +24,6 @@ const Nav = ({ user, setToggle }) => {
                     profile: false
                 })} />
 
-
                 <div className="relative group">
                     <Image src={user?.profileImg} className="rounded-3xl" height={40} width={40} alt="profile img" />
 
@@ -38,12 +38,6 @@ const Nav = ({ user, setToggle }) => {
                         }}>Logout</div>
                     </div>
                 </div>
-
-
-
-
-
-
             </div>
         </div>
     </div >

@@ -7,7 +7,6 @@ import { currentMessageUser } from '@store/currentMessageSlice';
 
 const AllContacts = () => {
 
-
     const dispatch = useDispatch();
     const users = useSelector(state => (state.users.data))
 
@@ -18,7 +17,6 @@ const AllContacts = () => {
 
     return (
         <div className='flex flex-col'>
-
             {
                 Object.keys(users).map((key) => {
                     const contacts = users[key];
