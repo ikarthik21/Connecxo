@@ -10,7 +10,7 @@ import Profile from "@components/User/Profile";
 
 const Nav = ({ user, setToggle }) => {
 
-    return <div className="bg-slate-600 py-[12px] px-2 rounded-l-lg "  >
+    return <div className="bg-slate-600 py-[12px] px-2 rounded-l-lg border-color-1  border-r-[1px]  "  >
         <div className="flex items-center justify-between">
 
             <BiSolidMessageSquareDetail size={31} cursor="pointer" onClick={() => setToggle({
@@ -60,7 +60,7 @@ const Contact = ({ img, name, lastchat }) => {
 
 
 const Messages = () => {
-    return <div className="flex  flex-col flex-main-1 bg-slate-800 cursor-pointer rounded-l-lg  min-h-[87vh] overflow-y-scroll scrollbar ">
+    return <div className="flex  flex-col flex-main-1 bg-slate-800 cursor-pointer rounded-l-lg  min-h-[87vh] overflow-y-scroll scrollbar">
 
         <div className="sticky top-0 bg-slate-800 pb-3 pl-2 ">
             <input type="text" className="ml-2 mt-4  mb-1 text-black mr-8 px-2 py-1 rounded-lg border-none outline-none  w-96" placeholder="search contact" />
@@ -102,7 +102,7 @@ const ChatMenu = () => {
     })
 
     return (
-        <div className="flex flex-col flex-main-1  bg-slate-800 cursor-pointer rounded-l-xl border-r ">
+        <div className="flex flex-col flex-main-1  bg-slate-800 cursor-pointer rounded-l-xl  border-color-1  border-r-[1px]  ">
             <div className="flex flex-col">
                 <Nav user={session?.user} setToggle={setToggle} />
 
