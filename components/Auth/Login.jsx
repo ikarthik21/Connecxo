@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import { Black_Ops_One } from "next/font/google";
 import { FcGoogle } from "react-icons/fc";
@@ -49,7 +50,7 @@ const Login = () => {
     }, []);
 
     return (
-        <div className="flex flex-col m-auto items-center">
+        <div className="flex flex-col  h-screen m-auto items-center">
             <HomeComp />
 
             {
@@ -72,7 +73,7 @@ const Login = () => {
                             Object.values(providers).map((provider) => {
                                 return (
                                     <button
-                                        className=" bg-cyan-500 mt-12  mb-8 flex justify-center items-center py-[10px]  px-4  rounded"
+                                        className=" bg-cyan-500  mb-24 flex justify-center items-center py-[10px]  px-4  rounded"
                                         onClick={() => {
                                             signIn(provider.id);
                                         }}

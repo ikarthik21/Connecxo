@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 export default function Home() {
   const { data: session } = useSession();
   return (
-    <main className="flex flex-col p-4 h-screen m-auto">
+    <main className="flex flex-col p-4 m-auto h-[98vh] overflow-y-hidden   ">
       {session?.user ? <ChatHome /> : <Login />}
     </main >
   )
