@@ -48,6 +48,7 @@ const Login = () => {
             setProviders(res);
         })();
     }, []);
+    
 
     return (
         <div className="flex flex-col  h-screen m-auto items-center">

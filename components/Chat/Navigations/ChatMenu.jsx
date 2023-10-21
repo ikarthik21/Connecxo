@@ -63,7 +63,7 @@ const Messages = () => {
     return <div className="flex  flex-col flex-main-1 bg-slate-800 cursor-pointer rounded-l-lg  min-h-[87vh] overflow-y-scroll scrollbar">
 
         <div className="sticky top-0 bg-slate-800 pb-3 pl-2 ">
-            <input type="text" className="ml-2 mt-4  mb-1 text-black mr-8 px-2 py-1 rounded-lg border-none outline-none  w-96" placeholder="search contact" />
+            <input type="text" className="ml-2 mt-4  mb-1 text-black mr-8 px-2 py-1  rounded-xl  border-none outline-none  w-96" placeholder="search contact" />
 
         </div>
 
