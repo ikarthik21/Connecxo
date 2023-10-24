@@ -80,12 +80,15 @@ const Messages = ({ messages, userId, showSearch, setShowSearch }) => {
                 chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
             }
         };
-        scrollToBottom();
+
+        // Delay the scroll to ensure the content has rendered
+        setTimeout(scrollToBottom, 0);
     }, [messages]);
+
 
     return (
         <div ref={chatContainerRef} className='flex p-3 min-h-[80vh] flex-col overflow-scroll overflow-x-hidden  scrollbar'>
-            <div className='flex flex-col '>
+            <div className='flex flex-col   '>
                 {showSearch && (
                     <div className='sticky top-0 flex justify-end  '>
                         <div className='bg-[#475569] p-2 absolute rounded-md flex items-center z-50'>
@@ -94,7 +97,7 @@ const Messages = ({ messages, userId, showSearch, setShowSearch }) => {
                                 className='px-4 w-72 py-[2px] text-black bg-[#f5f5f5] outline-none border-none rounded-md'
                                 onChange={(e) => setSearch(e.target.value)}
                                 value={search}
-                                autoFocus={showSearch} 
+                                autoFocus={showSearch}
                             />
                             <IoMdClose size={22} cursor={"pointer"} className='ml-4' onClick={() => setShowSearch(false)} />
                         </div>
@@ -107,10 +110,13 @@ const Messages = ({ messages, userId, showSearch, setShowSearch }) => {
                             messagesForDate.some(message => message.message.includes(search))
                         )
                         .map(([date, messagesForDate]) => (
+
                             <div key={date} className="flex flex-col">
+
                                 <div className="mb-2 text-center bg-gray-700 flex justify-center px-2 py-1 rounded-lg m-auto sticky top-0 z-10">
                                     <h1>{date}</h1>
                                 </div>
+
                                 {messagesForDate
                                     .filter(message => message.message.includes(search))
                                     .map((message, idx) => (
