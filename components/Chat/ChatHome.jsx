@@ -1,5 +1,6 @@
 'use client';
-import SingleChat from "./SingleChat/SingleChat";
+
+import SingleChat from "./SingleChat/chat/SingleChat";
 import ChatMenu from './Navigations/ChatMenu';
 
 const ChatHome = () => {

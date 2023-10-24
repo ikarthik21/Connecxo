@@ -1,19 +1,16 @@
 'use client';
 
-import ChatNav from "./ChatNav";
-import InputBox from "./InputBox";
-import { useSelector, useDispatch } from 'react-redux';
 import { HomeComp } from "@components/Auth/Login";
-import { useEffect, useRef, useState } from "react";
-import { useSession } from "next-auth/react";
 import { addMessageF, getMessagesF } from '@utils/apis/messageApi';
 import { getMessages, addMessages } from '@store/messagesSlice';
-import Messages from "./Messages";
-import { io } from 'socket.io-client';
 import { getISOTime } from "@components/Utils";
-
-
-
+import { io } from 'socket.io-client';
+import { useSession } from "next-auth/react";
+import { useEffect, useRef, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import ChatNav from "./ChatNav";
+import InputBox from "./InputBox";
+import Messages from "../messages/Messages";
 
 const SingleChat = () => {
 
@@ -22,6 +19,7 @@ const SingleChat = () => {
     const user = useSelector(state => state.cmuser);
     const messages = useSelector(state => state.messages);
     const [message, setMessage] = useState("");
+    const [showSearch, setShowSearch] = useState(false);
     const [files, setFiles] = useState([]);
     const socket = useRef();
 
@@ -89,12 +87,16 @@ const SingleChat = () => {
             {
                 user.id ?
                     <div className="flex flex-col justify-between  h-[96vh] ">
-                        <ChatNav user={user} />
-                        <Messages messages={messages} userId={session.user.id} />
+
+                        <ChatNav user={user} setShowSearch={setShowSearch} />
+
+                        <Messages messages={messages} userId={session.user.id} showSearch={showSearch} setShowSearch={setShowSearch} />
+
                         <InputBox setMessage={setMessage} files={files} setFiles={setFiles} message={message} sendMessage={sendMessage} />
+
                     </div>
                     :
-                    
+
                     <HomeComp />
             }
         </div>
