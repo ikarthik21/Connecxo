@@ -94,6 +94,7 @@ const Messages = ({ messages, userId, showSearch, setShowSearch }) => {
                                 className='px-4 w-72 py-[2px] text-black bg-[#f5f5f5] outline-none border-none rounded-md'
                                 onChange={(e) => setSearch(e.target.value)}
                                 value={search}
+                                autoFocus={showSearch} 
                             />
                             <IoMdClose size={22} cursor={"pointer"} className='ml-4' onClick={() => setShowSearch(false)} />
                         </div>
