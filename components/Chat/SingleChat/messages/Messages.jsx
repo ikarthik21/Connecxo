@@ -74,14 +74,12 @@ const Messages = ({ messages, userId, showSearch, setShowSearch }) => {
         });
         setGroupedMessages(grouped);
 
-        // Scroll to bottom when new messages are received
         const scrollToBottom = () => {
             if (chatContainerRef.current) {
                 chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
             }
         };
 
-        // Delay the scroll to ensure the content has rendered
         setTimeout(scrollToBottom, 0);
     }, [messages]);
 
@@ -99,14 +97,17 @@ const Messages = ({ messages, userId, showSearch, setShowSearch }) => {
                                 value={search}
                                 autoFocus={showSearch}
                             />
-                            <IoMdClose size={22} cursor={"pointer"} className='ml-4' onClick={() => setShowSearch(false)} />
+                            <IoMdClose size={22} cursor={"pointer"} className='ml-2' onClick={() => {
+                                setShowSearch(false)
+                                setSearch("")
+                            }} />
                         </div>
                     </div>
                 )}
 
                 {
                     Object.entries(groupedMessages)
-                        .filter(([date, messagesForDate]) =>
+                        .filter(([ , messagesForDate]) =>
                             messagesForDate.some(message => message.message.includes(search))
                         )
                         .map(([date, messagesForDate]) => (
@@ -114,7 +115,7 @@ const Messages = ({ messages, userId, showSearch, setShowSearch }) => {
                             <div key={date} className="flex flex-col">
 
                                 <div className="mb-2 text-center bg-gray-700 flex justify-center px-2 py-1 rounded-lg m-auto sticky top-0 z-10">
-                                    <h1>{date}</h1>
+                                    <p className='text-sm'>{date}</p>
                                 </div>
 
                                 {messagesForDate

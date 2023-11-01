@@ -15,7 +15,20 @@ export const addMessageF = async (message) => {
 export const getMessagesF = async (from, to) => {
     try {
         const res = await axios.get(`${B_URL}/api/message/get-messages/${from}/${to}`);
-        return res.data;    }
+        return res.data;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+export const getInitMessages = async (from) => {
+    try {
+        const res = await axios.get(`${B_URL}/api/message/getintialmsgs/${from}`);
+        return res.data;
+    }
     catch (error) {
         console.log(error);
     }

@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 const ChatNav = ({ user, setShowSearch }) => {
 
-    return <div className="bg-slate-600 flex justify-between py-[8px] px-4 items-center">
+    return <div className="bg-slate-600 rounded-r-lg  flex justify-between py-[8px] px-4 items-center">
 
         <div className='flex'>
             <Image src={user?.profileImg} className="h-12 w-12 rounded-3xl" height={2} width={40}

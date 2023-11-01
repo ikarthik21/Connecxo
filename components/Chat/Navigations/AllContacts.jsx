@@ -40,7 +40,7 @@ const AllContacts = () => {
                                 {search === "" && <p className='ml-4 mt-1 mb-1'>{key}</p>}
 
                                 {
-                                    contacts.filter(user => (user.display_name.toLowerCase()).includes(search.toLocaleLowerCase())).map((user) => (
+                                    contacts.filter(user => (user.display_name.toLowerCase()).includes(search.toLowerCase())).map((user) => (
 
                                         <div
                                             className="flex border-b-[1px] border-color-1 py-4 px-2 hover:bg-slate-700"
