@@ -1,17 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
 export const socketSlice = createSlice({
     name: "socket",
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
     initialState: {},
     reducers: {
         addSocket(state, action) {
             state = action.payload;
-        },
-        getSocket(state) {
-            return state;
         }
     }
 });
 
-export const { addSocket, getSocket } = socketSlice.actions;
+export const { addSocket } = socketSlice.actions;
 

@@ -2,7 +2,7 @@ import { BsFillEmojiWinkFill, BsFillMicFill } from 'react-icons/bs';
 import { MdSend } from 'react-icons/md';
 import EmojiPicker from 'emoji-picker-react';
 import { useState, useRef, useEffect } from 'react';
-import VoiceRecorder from '../Audio/VoiceRecorder';
+import VoiceRecorder from '../AudioRecord/VoiceRecorder';
 import FileAttach from '../files/FIleAttach';
 
 
@@ -61,17 +61,25 @@ const InputBox = ({ setMessage, sendMessage, message, setFiles, files }) => {
 
                     <div>
 
-                        <div className='flex  flex-t-2  item-center justify-between' >
+                        <div className='flex  item-center justify-between' >
 
-                            <EmojiBox setMessage={setMessage} />
 
-                            <FileAttach setFiles={setFiles} files={files} sendMessage={sendMessage} />
+                            <div className='flex flex-2 items-center '>
+                                <div className='flex items-center justify-between  mr-6 min-w-[80px]'>
 
-                            <div className='flex flex-2 items-center ml-4'>
+                                    <EmojiBox setMessage={setMessage} className="mr-4" />
+
+                                    <FileAttach setFiles={setFiles} files={files} sendMessage={sendMessage} />
+
+
+                                </div>
+
+
+
                                 <input
                                     type="text"
-                                    className='rounded-lg outline-none border-none  text-black p-[6px] mr-2 w-[54vw]'
-                                    placeholder='Type a message'
+                                    className='rounded-lg outline-none border-none  text-black p-[6px] mr-2 w-[55vw]'
+                                    placeholder='Type a message...'
                                     onChange={(e) => setMessage(e.target.value)}
                                     value={message}
                                     onKeyDown={(e) => {
@@ -81,9 +89,14 @@ const InputBox = ({ setMessage, sendMessage, message, setFiles, files }) => {
                                     }}
                                 />
 
-                                <BsFillMicFill size={25} cursor="pointer" onClick={() => setShowvoice(true)} />
+                                <div className='flex items-center justify-between ml-2  min-w-[70px]'>
 
-                                <MdSend size={25} className='ml-4' cursor="pointer" onClick={() => sendMessage(message, "text")} />
+                                    <BsFillMicFill size={25} cursor="pointer" onClick={() => setShowvoice(true)} />
+
+                                    <MdSend size={25} cursor="pointer" onClick={() => sendMessage(message, "text")} />
+                                </div>
+
+
 
                             </div>
                         </div>

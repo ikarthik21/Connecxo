@@ -14,6 +14,10 @@ import { timeString } from '@components/Utils';
 import { BsFillCameraFill } from 'react-icons/bs'
 import { currentMessageUser } from '@store/currentMessageSlice';
 import { useDispatch } from "react-redux";
+import { onlineUsers } from '@store/onlineUsers';
+
+
+
 
 const Nav = ({ user, setToggle }) => {
 
@@ -108,11 +112,14 @@ const Messages = () => {
     const [users, setUsers] = useState();
     const { data: session } = useSession();
     const [search, setSearch] = useState("");
+    const dispatch = useDispatch();
+
 
     useEffect(() => {
         (async () => {
             if (session.user.id) {
                 const users = await getInitMessages(session.user.id);
+                dispatch(onlineUsers(users.onlineUsers));
                 setUsers(users.users);
             }
         }
@@ -136,7 +143,7 @@ const Messages = () => {
         <div className="flex flex-col  " >
             {
                 users?.filter(user => (user.display_name.toLowerCase()).includes(search.toLowerCase())).map(user => {
-                    return <Contact user={user} />
+                    return <Contact user={user} key={user.id} />
                 })
             }
         </div >

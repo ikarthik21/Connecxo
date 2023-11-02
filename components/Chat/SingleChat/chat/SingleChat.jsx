@@ -3,6 +3,7 @@
 import { HomeComp } from "@components/Auth/Login";
 import { addMessageF, getMessagesF } from '@utils/apis/messageApi';
 import { getMessages, addMessages } from '@store/messagesSlice';
+import { initVideo, initAudio, incomingCall, closeIncoming, endCall } from '@store/callSlice';
 import { getISOTime } from "@components/Utils";
 import { io } from 'socket.io-client';
 import { useSession } from "next-auth/react";
@@ -11,6 +12,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import ChatNav from "./ChatNav";
 import InputBox from "./InputBox";
 import Messages from "../messages/Messages";
+import Audio from "../call/audio/Audio";
+import Video from "../call/video/Video";
+import CallNotify from './CallNotify';
+
 
 const SingleChat = () => {
 
@@ -22,7 +27,7 @@ const SingleChat = () => {
     const [showSearch, setShowSearch] = useState(false);
     const [files, setFiles] = useState([]);
     const socket = useRef();
-
+    const calls = useSelector(state => state.calls);
     // Function for sending messages 
     const sendMessage = async (message, messtype) => {
         if (message === "") return;
@@ -66,6 +71,7 @@ const SingleChat = () => {
     useEffect(() => {
         if (session?.user) {
             socket.current = io(process.env.NEXT_PUBLIC_BACKEND_URL);
+            // dispatch(addSocket(socket.));
             socket.current.emit("add-user", session?.user.id);
         }
     }, [session?.user]);
@@ -78,28 +84,81 @@ const SingleChat = () => {
                 dispatch(addMessages(data));
             })
 
+            socket.current.on('receive-call', (data) => {
+                dispatch(incomingCall(data));
+            })
+
+            socket.current.on('close-call', () => {
+                dispatch(endCall());
+            })
+
+            socket.current.on('close-incoming-call', () => {
+                dispatch(closeIncoming())
+            })
+
         }
     }, [socket.current]);
 
 
+    const initVideoCall = () => {
+        dispatch(initVideo());
+    }
+
+    const initAudioCall = () => {
+        dispatch(initAudio());
+        const audio = {
+            from: session.user.id,
+            to: user.id,
+            type: "audio",
+            user: session.user
+        }
+        socket.current.emit('init-call', audio);
+    }
+
+    const DenyCall = () => {
+        const call = {
+            to: calls.INCOMING_VIDEO_CALL.user.user.id
+        }
+        socket.current.emit('end-call', call);
+        dispatch(endCall());
+    }
+
+    const cancelCall = () => {
+        const userobj = {
+            to: user.id,
+        }
+        socket.current.emit('cancel-call', userobj);
+    }
+
+
+
     return (
-        <div className="flex flex-col flex-main-2 bg-[#111A30]  justify-between  rounded-r-lg" >
-            {
-                user.id ?
-                    <div className="flex flex-col justify-between  h-[96vh] ">
 
-                        <ChatNav user={user} setShowSearch={setShowSearch} />
+        calls.VIDEO_CALL ? <Video /> : calls.AUDIO_CALL ? <Audio cancelCall={cancelCall} /> :
 
-                        <Messages messages={messages} userId={session.user.id} showSearch={showSearch} setShowSearch={setShowSearch} />
+            <div className="flex flex-col flex-main-2 bg-[#111A30]  justify-between  rounded-r-lg">
 
-                        <InputBox setMessage={setMessage} files={files} setFiles={setFiles} message={message} sendMessage={sendMessage} />
+                {calls.INCOMING_VIDEO_CALL.visible && <CallNotify DenyCall={DenyCall} />}
 
-                    </div>
-                    :
+                {
 
-                    <HomeComp />
-            }
-        </div>
+                    user.id ?
+                        <div className="flex flex-col justify-between  h-[96vh] ">
+
+
+                            <ChatNav user={user} setShowSearch={setShowSearch} initVideoCall={initVideoCall} initAudioCall={initAudioCall} />
+
+                            <Messages messages={messages} userId={session.user.id} showSearch={showSearch} setShowSearch={setShowSearch} />
+
+                            <InputBox setMessage={setMessage} files={files} setFiles={setFiles} message={message} sendMessage={sendMessage} />
+
+                        </div>
+                        :
+
+                        <HomeComp />
+                }
+            </div>
+
     );
 }
 

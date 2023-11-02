@@ -85,7 +85,7 @@ const Messages = ({ messages, userId, showSearch, setShowSearch }) => {
 
 
     return (
-        <div ref={chatContainerRef} className='flex p-3 min-h-[80vh] flex-col overflow-scroll overflow-x-hidden  scrollbar'>
+        <div ref={chatContainerRef} className='flex p-3 min-h-[79vh] flex-col overflow-scroll overflow-x-hidden  scrollbar'>
             <div className='flex flex-col   '>
                 {showSearch && (
                     <div className='sticky top-0 flex justify-end  '>
