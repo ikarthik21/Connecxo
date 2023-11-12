@@ -21,3 +21,14 @@ export const userIdF = async (email) => {
         console.log(error);
     }
 }
+
+export const generateTokenF = async (userId) => {
+    try {
+        const res = await axios.get(`${B_URL}/api/auth/zego/token/${userId}`);
+        return res.data;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+

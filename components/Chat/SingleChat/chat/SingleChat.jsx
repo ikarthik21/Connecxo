@@ -15,19 +15,30 @@ import Messages from "../messages/Messages";
 import Audio from "../call/audio/Audio";
 import Video from "../call/video/Video";
 import CallNotify from './CallNotify';
+import { generateTokenF } from '@utils/apis/authApi';
+import { ZegoExpressEngine } from 'zego-express-engine-webrtc';
 
 
 const SingleChat = () => {
 
-    const { data: session } = useSession();
     const dispatch = useDispatch();
+    const { data: session } = useSession();
     const user = useSelector(state => state.cmuser);
     const messages = useSelector(state => state.messages);
     const [message, setMessage] = useState("");
     const [showSearch, setShowSearch] = useState(false);
     const [files, setFiles] = useState([]);
-    const socket = useRef();
+    const socket = useRef(null);
+    const [socketEvent, setSocketEvent] = useState(false);
+
     const calls = useSelector(state => state.calls);
+    const [localStream, setLocalStream] = useState(undefined);
+    const [publishStream, setPublishStream] = useState(undefined);
+    const [callAccept, setCallAccept] = useState(false);
+    const [token, setToken] = useState(undefined);                // zego token
+    const [zegoinstance, setZegoInstance] = useState(undefined); // zego instance
+
+
     // Function for sending messages 
     const sendMessage = async (message, messtype) => {
         if (message === "") return;
@@ -57,29 +68,32 @@ const SingleChat = () => {
 
     // Messages Fetching
     useEffect(() => {
-        const fetchMessages = async () => {
-            if (session.user.id && user.id) {
-                const res = await getMessagesF(session.user.id, user.id);
-                dispatch(getMessages(res.messages));
+        if (user) {
+            const fetchMessages = async () => {
+                if (session.user.id && user.id) {
+                    const res = await getMessagesF(session.user.id, user.id);
+                    dispatch(getMessages(res.messages));
+                }
             }
+            fetchMessages();
         }
-        fetchMessages();
+
     }, [user]);
 
 
     // connecting user with socket
     useEffect(() => {
-        if (session?.user) {
+        if (session.user) {
             socket.current = io(process.env.NEXT_PUBLIC_BACKEND_URL);
-            // dispatch(addSocket(socket.));
             socket.current.emit("add-user", session?.user.id);
         }
-    }, [session?.user]);
+    }, [session.user]);
 
 
-    // socket message receive
+    // socket message && call receive
     useEffect(() => {
         if (socket.current) {
+
             socket.current.on('msg-receive', (data) => {
                 dispatch(addMessages(data));
             })
@@ -96,12 +110,103 @@ const SingleChat = () => {
                 dispatch(closeIncoming())
             })
 
+            setSocketEvent(true);
         }
     }, [socket.current]);
 
 
+
+    useEffect(() => {
+        if (callAccept) {
+            (async () => {
+                const res = await generateTokenF(user.id);
+                setToken(res.token);
+            }
+            )();
+        }
+    }, [callAccept])
+
+
+    useEffect(() => {
+        if (token) {
+            (
+                async () => {
+                    const zg = new ZegoExpressEngine(parseInt(process.env.NEXT_PUBLIC_ZEGO_APP_ID), process.env.NEXT_PUBLIC_ZEGO_SERVER_SECRET);
+
+                    setZegoInstance(zg);
+
+                    zg.on("roomStreamUpdate", async (roomId, updateType, streamList, extendedData) => {
+
+                        if (updateType === "ADD") {
+                            const rmVideo = document.getElementById("remote-video");
+                            const vd = document.createElement(calls.INCOMING_VIDEO_CALL.visible ? "video" : "audio");
+                            vd.id = streamList[0].streamID;
+                            vd.autoplay = true;
+                            vd.playsInline = true;
+                            vd.muted = false;
+                            if (rmVideo) {
+                                rmVideo.appendChild(vd);
+                            }
+                            zg.startPlayingStream(streamList[0].streamID, {
+                                audio: true,
+                                video: true
+                            }).then(stream => vd.srcObject = stream)
+                        }
+                        else if (updateType === "DELETE" && zg && localStream && streamList[0].streamID) {
+                            zg.destroyStream(localStream);
+                            zg.stopPublishingStream(streamList[0].streamID);
+                            zg.logoutRoom(calls.INCOMING_VIDEO_CALL.user.roomId);
+                            dispatch(endCall());
+                        }
+                    }
+                    )
+
+                    await zg.loginRoom(calls.INCOMING_VIDEO_CALL.user.roomId, token, { userID: calls.INCOMING_VIDEO_CALL.user.user.id, userName: calls.INCOMING_VIDEO_CALL.user.user.name }, { userUpdate: true });
+
+                    const localStream = zg.createStream({
+                        camera: true,
+                        video: true
+
+                    });
+
+                    const localVideo = document.getElementById("local-video");
+                    const videoele = document.createElement(calls.VIDEO_CALL ? "video" : "audio");
+                    videoele.id = "video-local-zego";
+                    videoele.className = "h-28 w-32";
+                    videoele.autoplay = true;
+                    videoele.playsInline = true;
+                    videoele.muted = false;
+                    if (localVideo) {
+                        localVideo.appendChild(videoele);
+                    }
+                    const td = document.getElementById("video-local-zego");
+                    td.srcObject = localStream;
+                    const streamId = "123" + Date.now().toString();
+                    setPublishStream(streamId);
+                    setLocalStream(localStream);
+                    zg.startPublishingStream(streamId, localStream);
+                }
+            )();
+        }
+    }, [token])
+
+
+
+
+
     const initVideoCall = () => {
+
         dispatch(initVideo());
+
+        const video = {
+            from: session.user.id,
+            to: user.id,
+            type: "video",
+            user: session.user,
+            roomId: Date.now().toString()
+        }
+
+        socket.current.emit('init-call', video);
     }
 
     const initAudioCall = () => {
@@ -110,35 +215,59 @@ const SingleChat = () => {
             from: session.user.id,
             to: user.id,
             type: "audio",
-            user: session.user
+            user: session.user,
+            roomId: Date.now().toString()
         }
         socket.current.emit('init-call', audio);
     }
 
+
+
     const DenyCall = () => {
-        const call = {
-            to: calls.INCOMING_VIDEO_CALL.user.user.id
+
+        let call = {};
+        if (calls.INCOMING_VIDEO_CALL.visible) {
+            call = {
+                to: calls.INCOMING_VIDEO_CALL.user.user.id
+            }
         }
+
+        if (calls.INCOMING_AUDIO_CALL.visible) {
+            call = {
+                to: calls.INCOMING_AUDIO_CALL.user.user.id
+            }
+        }
+
+        if (zegoinstance && localStream && publishStream) {
+            zegoinstance.destroyStream(localStream);
+            zegoinstance.stopPublishingStream(publishStream);
+            zegoinstance.logoutRoom(calls.INCOMING_VIDEO_CALL.user.roomId);
+        }
+
         socket.current.emit('end-call', call);
         dispatch(endCall());
     }
 
     const cancelCall = () => {
-        const userobj = {
-            to: user.id,
+
+        if (zegoinstance && localStream && publishStream) {
+            zegoinstance.destroyStream(localStream);
+            zegoinstance.stopPublishingStream(publishStream);
+            zegoinstance.logoutRoom(calls.INCOMING_VIDEO_CALL.user.roomId);
         }
-        socket.current.emit('cancel-call', userobj);
+
+        socket.current.emit('cancel-call', { to: user.id });
     }
 
 
 
     return (
 
-        calls.VIDEO_CALL ? <Video /> : calls.AUDIO_CALL ? <Audio cancelCall={cancelCall} /> :
+        calls.VIDEO_CALL ? <Video cancelCall={cancelCall} /> : calls.AUDIO_CALL ? <Audio cancelCall={cancelCall} /> :
 
             <div className="flex flex-col flex-main-2 bg-[#111A30]  justify-between  rounded-r-lg">
 
-                {calls.INCOMING_VIDEO_CALL.visible && <CallNotify DenyCall={DenyCall} />}
+                {(calls.INCOMING_VIDEO_CALL.visible || calls.INCOMING_AUDIO_CALL.visible) && <CallNotify setCallAccept={setCallAccept} DenyCall={DenyCall} />}
 
                 {
 

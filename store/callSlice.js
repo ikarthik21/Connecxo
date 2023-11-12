@@ -8,7 +8,10 @@ const initialState = {
         user: {},
         visible: false
     },
-    INCOMING_AUDIO_CALL: undefined,
+    INCOMING_AUDIO_CALL: {
+        user: {},
+        visible: false
+    }
 }
 
 export const callSlice = createSlice({
@@ -25,20 +28,44 @@ export const callSlice = createSlice({
             return state = { ...initialState, AUDIO_CALL: true }
         },
         endCall(state) {
-            return state = { ...initialState }
-        },
-        incomingCall(state, action) {
             return state = {
-                ...state, INCOMING_VIDEO_CALL: {
-                    user: action.payload,
-                    visible: true
+                ...initialState, INCOMING_VIDEO_CALL: {
+                    user: {},
+                    visible: false
+                },
+                INCOMING_AUDIO_CALL: {
+                    user: {},
+                    visible: false
                 }
             }
-
         },
+        incomingCall(state, action) {
+
+            if (action.payload.type === "audio") {
+                return state = {
+                    ...state, INCOMING_AUDIO_CALL: {
+                        user: action.payload,
+                        visible: true
+                    }
+                }
+            }
+            else {
+                return state = {
+                    ...state, INCOMING_VIDEO_CALL: {
+                        user: action.payload,
+                        visible: true
+                    }
+                }
+            }
+        },
+        
         closeIncoming(state) {
             return state = {
                 ...state, INCOMING_VIDEO_CALL: {
+                    user: {},
+                    visible: false
+                },
+                INCOMING_AUDIO_CALL: {
                     user: {},
                     visible: false
                 }
