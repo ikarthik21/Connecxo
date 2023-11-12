@@ -27,6 +27,7 @@ const SingleChat = () => {
     const [showSearch, setShowSearch] = useState(false);
     const [files, setFiles] = useState([]);
     const socket = useRef();
+    const [socketEvent, setSocketEvent] = useState(false);
     const calls = useSelector(state => state.calls);
     // Function for sending messages 
     const sendMessage = async (message, messtype) => {
@@ -69,12 +70,12 @@ const SingleChat = () => {
 
     // connecting user with socket
     useEffect(() => {
-        if (session?.user) {
+        if (session.user) {
             socket.current = io(process.env.NEXT_PUBLIC_BACKEND_URL);
             // dispatch(addSocket(socket.));
             socket.current.emit("add-user", session?.user.id);
         }
-    }, [session?.user]);
+    }, [session.user]);
 
 
     // socket message receive
@@ -95,7 +96,7 @@ const SingleChat = () => {
             socket.current.on('close-incoming-call', () => {
                 dispatch(closeIncoming())
             })
-
+            setSocketEvent(true)
         }
     }, [socket.current]);
 
